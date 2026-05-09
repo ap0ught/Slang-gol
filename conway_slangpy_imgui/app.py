@@ -136,7 +136,6 @@ class LifeState:
 life = LifeState(GRID_WIDTH, GRID_HEIGHT)
 
 
-
 def draw_ui() -> None:
     """Draws the ImGui interface."""
     from imgui_bundle import imgui
@@ -188,7 +187,6 @@ def draw_ui() -> None:
     imgui.text("Next step: upload the RGBA grid as a texture for real display.")
 
     imgui.end()
-
 
 
 def main() -> None:
