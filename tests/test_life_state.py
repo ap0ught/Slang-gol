@@ -7,6 +7,9 @@ from conway_slangpy_imgui.app import LifeState
 
 MONOTONIC_PATCH_PATH = "conway_slangpy_imgui.app.time.monotonic"
 INITIAL_TIME = 10.0
+PAUSED_TIME_OFFSET = 1.0
+BELOW_INTERVAL_OFFSET = 0.005
+ABOVE_INTERVAL_OFFSET = 0.02
 
 
 class LifeStateTests(unittest.TestCase):
@@ -56,16 +59,16 @@ class LifeStateTests(unittest.TestCase):
         life.settings.updates_per_second = test_updates_per_second
 
         life.settings.running = False
-        with patch(MONOTONIC_PATCH_PATH, return_value=11.0):
+        with patch(MONOTONIC_PATCH_PATH, return_value=INITIAL_TIME + PAUSED_TIME_OFFSET):
             life.update_if_needed()
         self.assertEqual(life.settings.generation, 0)
 
         life.settings.running = True
-        with patch(MONOTONIC_PATCH_PATH, return_value=INITIAL_TIME + 0.005):
+        with patch(MONOTONIC_PATCH_PATH, return_value=INITIAL_TIME + BELOW_INTERVAL_OFFSET):
             life.update_if_needed()
         self.assertEqual(life.settings.generation, 0)
 
-        with patch(MONOTONIC_PATCH_PATH, return_value=INITIAL_TIME + 0.02):
+        with patch(MONOTONIC_PATCH_PATH, return_value=INITIAL_TIME + ABOVE_INTERVAL_OFFSET):
             life.update_if_needed()
         self.assertEqual(life.settings.generation, 1)
 
