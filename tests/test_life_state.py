@@ -7,9 +7,11 @@ from conway_slangpy_imgui.app import LifeState
 
 MONOTONIC_PATCH_PATH = "conway_slangpy_imgui.app.time.monotonic"
 INITIAL_TIME = 10.0
+TEST_UPDATES_PER_SECOND = 100.0
+EXPECTED_UPDATE_INTERVAL = 1.0 / TEST_UPDATES_PER_SECOND
 PAUSED_TIME_OFFSET = 1.0
-BELOW_INTERVAL_OFFSET = 0.005
-ABOVE_INTERVAL_OFFSET = 0.02
+BELOW_INTERVAL_OFFSET = EXPECTED_UPDATE_INTERVAL / 2
+ABOVE_INTERVAL_OFFSET = EXPECTED_UPDATE_INTERVAL * 2
 
 
 class LifeStateTests(unittest.TestCase):
@@ -49,14 +51,12 @@ class LifeStateTests(unittest.TestCase):
         np.testing.assert_array_equal(image[0, 0], np.array([0, 0, 0, 255], dtype=np.uint8))
 
     def test_update_respects_timing_when_running(self) -> None:
-        test_updates_per_second = 100.0
-
         with patch(MONOTONIC_PATCH_PATH, return_value=INITIAL_TIME):
             life = LifeState(5, 5)
         life.slang_available = False
         life.clear()
         life.current[2, 1:4] = 1
-        life.settings.updates_per_second = test_updates_per_second
+        life.settings.updates_per_second = TEST_UPDATES_PER_SECOND
 
         life.settings.running = False
         with patch(MONOTONIC_PATCH_PATH, return_value=INITIAL_TIME + PAUSED_TIME_OFFSET):
