@@ -1,4 +1,5 @@
 import unittest
+import time
 
 import numpy as np
 
@@ -45,14 +46,16 @@ class LifeStateTests(unittest.TestCase):
         self.life.clear()
         self.life.current[2, 1:4] = 1
         self.life.settings.updates_per_second = 10.0
-        self.life._last_update = 0.0
 
         self.life.settings.running = False
         self.life.update_if_needed()
         self.assertEqual(self.life.settings.generation, 0)
 
         self.life.settings.running = True
-        self.life._last_update = 0.0
+        self.life.update_if_needed()
+        self.assertEqual(self.life.settings.generation, 0)
+
+        time.sleep(0.12)
         self.life.update_if_needed()
         self.assertEqual(self.life.settings.generation, 1)
 
