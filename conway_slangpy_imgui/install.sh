@@ -10,7 +10,9 @@ else
   VENV_PATH="$SCRIPT_DIR/$VENV_DIR"
 fi
 
-python3 -m venv "$VENV_PATH"
+if [[ ! -d "$VENV_PATH" ]]; then
+  python3 -m venv "$VENV_PATH"
+fi
 . "$VENV_PATH/bin/activate"
 python -m pip install --upgrade pip
 python -m pip install -r "$SCRIPT_DIR/requirements.txt"

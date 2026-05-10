@@ -44,7 +44,7 @@ class LifeStateTests(unittest.TestCase):
         np.testing.assert_array_equal(image[1, 1], np.array([255, 255, 255, 255], dtype=np.uint8))
         np.testing.assert_array_equal(image[0, 0], np.array([0, 0, 0, 255], dtype=np.uint8))
 
-    def test_update_if_needed_respects_running_and_timing(self) -> None:
+    def test_update_respects_timing_when_running(self) -> None:
         test_updates_per_second = 100.0
 
         with patch(MONOTONIC_PATCH_PATH, return_value=10.0):
