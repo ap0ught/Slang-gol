@@ -41,6 +41,21 @@ class LifeStateTests(unittest.TestCase):
         np.testing.assert_array_equal(image[1, 1], np.array([255, 255, 255, 255], dtype=np.uint8))
         np.testing.assert_array_equal(image[0, 0], np.array([0, 0, 0, 255], dtype=np.uint8))
 
+    def test_update_if_needed_respects_running_and_timing(self) -> None:
+        self.life.clear()
+        self.life.current[2, 1:4] = 1
+        self.life.settings.updates_per_second = 10.0
+        self.life._last_update = 0.0
+
+        self.life.settings.running = False
+        self.life.update_if_needed()
+        self.assertEqual(self.life.settings.generation, 0)
+
+        self.life.settings.running = True
+        self.life._last_update = 0.0
+        self.life.update_if_needed()
+        self.assertEqual(self.life.settings.generation, 1)
+
 
 if __name__ == "__main__":
     unittest.main()

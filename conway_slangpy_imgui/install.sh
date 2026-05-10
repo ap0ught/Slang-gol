@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+VENV_DIR="${1:-.venv}"
+
+if [[ "$VENV_DIR" = /* ]]; then
+  VENV_PATH="$VENV_DIR"
+else
+  VENV_PATH="$SCRIPT_DIR/$VENV_DIR"
+fi
+
+python3 -m venv "$VENV_PATH"
+source "$VENV_PATH/bin/activate"
+python -m pip install --upgrade pip
+python -m pip install -r "$SCRIPT_DIR/requirements.txt"
+
+echo "Environment ready at $VENV_PATH"
+echo "Activate it with: source \"$VENV_PATH/bin/activate\""

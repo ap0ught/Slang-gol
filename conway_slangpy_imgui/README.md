@@ -15,6 +15,12 @@ source .venv/bin/activate  # Linux/macOS
 pip install -r requirements.txt
 ```
 
+Or use the install helper:
+
+```bash
+./install.sh
+```
+
 ## Run
 
 ```bash
