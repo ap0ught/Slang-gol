@@ -45,7 +45,7 @@ class LifeStateTests(unittest.TestCase):
     def test_update_if_needed_respects_running_and_timing(self) -> None:
         self.life.clear()
         self.life.current[2, 1:4] = 1
-        self.life.settings.updates_per_second = 10.0
+        self.life.settings.updates_per_second = 100.0
 
         self.life.settings.running = False
         self.life.update_if_needed()
@@ -55,7 +55,7 @@ class LifeStateTests(unittest.TestCase):
         self.life.update_if_needed()
         self.assertEqual(self.life.settings.generation, 0)
 
-        time.sleep(0.12)
+        time.sleep(0.02)
         self.life.update_if_needed()
         self.assertEqual(self.life.settings.generation, 1)
 
