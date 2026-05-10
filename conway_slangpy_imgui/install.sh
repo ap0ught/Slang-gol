@@ -11,7 +11,7 @@ else
 fi
 
 python3 -m venv "$VENV_PATH"
-source "$VENV_PATH/bin/activate"
+. "$VENV_PATH/bin/activate"
 python -m pip install --upgrade pip
 python -m pip install -r "$SCRIPT_DIR/requirements.txt"
 

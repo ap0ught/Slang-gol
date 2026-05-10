@@ -5,6 +5,8 @@ import numpy as np
 
 from conway_slangpy_imgui.app import LifeState
 
+MONOTONIC_PATCH_PATH = "conway_slangpy_imgui.app.time.monotonic"
+
 
 class LifeStateTests(unittest.TestCase):
     def setUp(self) -> None:
@@ -45,7 +47,7 @@ class LifeStateTests(unittest.TestCase):
     def test_update_if_needed_respects_running_and_timing(self) -> None:
         test_updates_per_second = 100.0
 
-        with patch("conway_slangpy_imgui.app.time.monotonic", return_value=10.0):
+        with patch(MONOTONIC_PATCH_PATH, return_value=10.0):
             life = LifeState(5, 5)
         life.slang_available = False
         life.clear()
@@ -53,16 +55,16 @@ class LifeStateTests(unittest.TestCase):
         life.settings.updates_per_second = test_updates_per_second
 
         life.settings.running = False
-        with patch("conway_slangpy_imgui.app.time.monotonic", return_value=11.0):
+        with patch(MONOTONIC_PATCH_PATH, return_value=11.0):
             life.update_if_needed()
         self.assertEqual(life.settings.generation, 0)
 
         life.settings.running = True
-        with patch("conway_slangpy_imgui.app.time.monotonic", return_value=10.005):
+        with patch(MONOTONIC_PATCH_PATH, return_value=10.005):
             life.update_if_needed()
         self.assertEqual(life.settings.generation, 0)
 
-        with patch("conway_slangpy_imgui.app.time.monotonic", return_value=10.02):
+        with patch(MONOTONIC_PATCH_PATH, return_value=10.02):
             life.update_if_needed()
         self.assertEqual(life.settings.generation, 1)
 
