@@ -18,7 +18,7 @@ pip install -r requirements.txt
 Or use the install helper:
 
 ```bash
-./install.sh
+cd conway_slangpy_imgui && ./install.sh
 ```
 
 ## Run
