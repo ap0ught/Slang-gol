@@ -13,7 +13,8 @@ fi
 if [[ ! -d "$VENV_PATH" ]]; then
   python3 -m venv "$VENV_PATH"
 fi
-. "$VENV_PATH/bin/activate"
+# Bash is required by this script (see shebang).
+source "$VENV_PATH/bin/activate"
 python -m pip install --upgrade pip
 python -m pip install -r "$SCRIPT_DIR/requirements.txt"
 
