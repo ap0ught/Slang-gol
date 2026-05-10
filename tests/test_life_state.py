@@ -50,7 +50,7 @@ class LifeStateTests(unittest.TestCase):
         np.testing.assert_array_equal(image[1, 1], np.array([255, 255, 255, 255], dtype=np.uint8))
         np.testing.assert_array_equal(image[0, 0], np.array([0, 0, 0, 255], dtype=np.uint8))
 
-    def test_update_respects_timing_when_running(self) -> None:
+    def test_update_respects_timing_and_pause_state(self) -> None:
         with patch(MONOTONIC_PATCH_PATH, return_value=INITIAL_TIME):
             life = LifeState(5, 5)
         life.slang_available = False
