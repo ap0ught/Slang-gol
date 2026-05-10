@@ -1,5 +1,5 @@
 import unittest
-import time
+from unittest.mock import patch
 
 import numpy as np
 
@@ -43,21 +43,28 @@ class LifeStateTests(unittest.TestCase):
         np.testing.assert_array_equal(image[0, 0], np.array([0, 0, 0, 255], dtype=np.uint8))
 
     def test_update_if_needed_respects_running_and_timing(self) -> None:
-        self.life.clear()
-        self.life.current[2, 1:4] = 1
-        self.life.settings.updates_per_second = 100.0
+        test_updates_per_second = 100.0
 
-        self.life.settings.running = False
-        self.life.update_if_needed()
-        self.assertEqual(self.life.settings.generation, 0)
+        with patch("conway_slangpy_imgui.app.time.monotonic", return_value=10.0):
+            life = LifeState(5, 5)
+        life.slang_available = False
+        life.clear()
+        life.current[2, 1:4] = 1
+        life.settings.updates_per_second = test_updates_per_second
 
-        self.life.settings.running = True
-        self.life.update_if_needed()
-        self.assertEqual(self.life.settings.generation, 0)
+        life.settings.running = False
+        with patch("conway_slangpy_imgui.app.time.monotonic", return_value=11.0):
+            life.update_if_needed()
+        self.assertEqual(life.settings.generation, 0)
 
-        time.sleep(0.02)
-        self.life.update_if_needed()
-        self.assertEqual(self.life.settings.generation, 1)
+        life.settings.running = True
+        with patch("conway_slangpy_imgui.app.time.monotonic", return_value=10.005):
+            life.update_if_needed()
+        self.assertEqual(life.settings.generation, 0)
+
+        with patch("conway_slangpy_imgui.app.time.monotonic", return_value=10.02):
+            life.update_if_needed()
+        self.assertEqual(life.settings.generation, 1)
 
 
 if __name__ == "__main__":
